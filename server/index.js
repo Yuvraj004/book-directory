@@ -1,42 +1,47 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser'); 
-const cors = require('cors'); 
-const path = require('path'); 
+const { MongoClient, ServerApiVersion } = require('mongodb');
 
-const bookRoutes = require('./routes/books'); // Import book routes
-const userName = process.env.MONGO_USERNAME;
-const password = process.env.MONGO_PASSWORD;
+const cors = require('cors');
+const path = require('path');
+const bookRoutes = require('./routes/bookRoutes');
 const app = express();
 
-// Connect to MongoDB database
-mongoose.connect(`mongodb+srv://${userName}:${password}@cluster0.siv66b2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true, // For creating indexes efficiently
-  useFindAndModify: false // To disable deprecated methods
-})
-.then(() => console.log('Connected to MongoDB'))
-.catch(err => console.error('Error connecting to MongoDB:', err));
+const uri = `mongodb+srv://yuvrajchat:2PpBXBn7BM30v5PK@cluster0.siv66b2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
-// Configure middleware
-app.use(bodyParser.json()); // Parse incoming JSON requests
-app.use(cors()); // Enable CORS (adjust origins if needed)
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
+});
+async function run() {
+  try {
+    // Connect the client to the server	(optional starting in v4.7)
+    await client.connect();
+    // Send a ping to confirm a successful connection
+    await client.db("admin").command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  } finally {
+    // Ensures that the client will close when you finish/error
+    await client.close();
+  }
+}
+run().catch(console.dir);
 
-// Define routes
-app.use('/api/books', bookRoutes); // Use book routes for `/api/books` path
 
-// Serve static files in production (optional)
+app.use(express.json());
+app.use(cors());
+
+app.use('/api/books', bookRoutes);
+
 if (process.env.NODE_ENV === 'production') {
-  // Set static folder
   app.use(express.static(path.join(__dirname, 'public')));
-
-  // Handle any other route with index.html (assuming React in frontend)
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
   });
 }
 
-const port = process.env.PORT || 5000; // Use environment variable for port or default to 5000
-
+const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Server listening on port ${port}`));
