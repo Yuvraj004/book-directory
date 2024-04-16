@@ -38,19 +38,23 @@ const BookList = () => {
   };
 
   return (
-    <div className="book-list">
+    <div className="container d-flex grid flex-column justify-content-center align-items-center text-center">
       <h2>Book Directory</h2>
-      {books.map((book) => (
-        <Book
-          key={book._id}
-          _id={book._id}
-          title={book.title}
-          author={book.author}
-          publishedYear={book.publishedYear}
-          updateBook={updateBook}
-          deleteBook={deleteBook}
-        />
-      ))}
+      <div className='container text-center'>
+        <div className='row row-cols-3'>
+          {books.map((book) => (
+            <Book
+              key={book._id}
+              _id={book._id}
+              title={book.title}
+              author={book.author}
+              publishedYear={book.publishedYear}
+              updateBook={updateBook}
+              deleteBook={deleteBook}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

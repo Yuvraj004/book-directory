@@ -24,33 +24,45 @@ const Book = ({ _id, title, author, publishedYear, updateBook, deleteBook }) => 
   return (
     <div className="book">
       {showUpdateForm ? (
-        <div>
-          <input
+        <div className='container d-flex flex-column text-center align-items-center justify-content-between mt-2'>
+          <div className='row m-2'>
+            <input
             type="text"
             value={updatedTitle}
             onChange={(e) => setUpdatedTitle(e.target.value)}
-          />
-          <input
+          /></div>
+
+          <div className='row m-2'><input
             type="text"
             value={updatedAuthor}
             onChange={(e) => setUpdatedAuthor(e.target.value)}
-          />
-          <input
+          /></div>
+
+          <div className='row m-2'>
+            <input
             type="text"
+            className="form-control"
             value={updatedPublishedYear}
             onChange={(e) => setUpdatedPublishedYear(e.target.value)}
-          />
-          <button onClick={handleUpdate}>Save</button>
-          <button onClick={() => setShowUpdateForm(false)}>Cancel</button>
+          /></div>
+          <div className='container d-flex flex-row text-center justify-content-evenly '>
+            <button className='btn btn-primary' onClick={handleUpdate}>Save</button>
+            <button className='btn btn-primary' onClick={() => setShowUpdateForm(false)}>Cancel</button>
+          </div>
+          
         </div>
       ) : (
-        <div>
-          <h3>{title}</h3>
-          <p>By: {author}</p>
-          <p>Published: {publishedYear}</p>
-          <div className="book-actions">
-            <button onClick={() => setShowUpdateForm(true)}>Update</button>
-            <button onClick={handleDelete}>Delete</button>
+        <div className='col'>
+          <div className="card text-center mb-3" style={{width: "18rem"}}>
+            <div className="card-body">
+              <h5 className="card-title">{title}</h5>
+              <p className="card-text"> 
+                <p>By: {author}</p>
+                <p>Published: {publishedYear}</p>
+              </p>
+              <button style={{float:"left"}} className='btn btn-primary' onClick={() => setShowUpdateForm(true)}>Update</button>
+              <button style={{float:"right"}} className='btn btn-primary' onClick={handleDelete}>Delete</button>
+            </div>
           </div>
         </div>
       )}
