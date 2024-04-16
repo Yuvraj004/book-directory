@@ -7,34 +7,21 @@ const path = require('path');
 const bookRoutes = require('./routes/bookRoutes');
 const app = express();
 
-const uri = `mongodb+srv://yuvrajchat:2PpBXBn7BM30v5PK@cluster0.siv66b2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+const uri = 'mongodb+srv://yuvrajchat:2PpBXBn7BM30v5PK@cluster0.siv66b2.mongodb.net/';
 
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
+mongoose.connect(uri)
+.then(() => {
+  console.log('Connected to MongoDB');
+})
+.catch(err => {
+  console.error('Error connecting to MongoDB:', err);
 });
-async function run() {
-  try {
-    // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
-    // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
-  }
-}
-run().catch(console.dir);
 
 
 app.use(express.json());
 app.use(cors());
 
-app.use('/api/books', bookRoutes);
+app.use('/books', bookRoutes);
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, 'public')));

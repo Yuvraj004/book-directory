@@ -10,7 +10,7 @@ const AddBook = () => {
     e.preventDefault();
     try {
       const newBook = { title, author, publishedYear };
-      await axios.post('/api/books/createBook', newBook);
+      await axios.post('http://localhost:5000/books/createBook', newBook);
       window.location.reload(); // Simple reload for now
     } catch (err) {
       console.error(err);

@@ -5,10 +5,12 @@ exports.createBook = async (req, res) => {
   // Use body-parser or access req.body directly for data
   const { title, author, publishedYear } = req.body;
   try {
-    const newBook = await new Book({ title, author, publishedYear });
+    const newBook =  new Book({ title, author, publishedYear });
     await newBook.save();
+    console.log("Book Inserted");
     res.json(newBook).status(200);
   } catch (err) {
+    console.log(err);
     res.status(400).json({ message: err.message });
   }
 };
