@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-
+const backendUrl = process.env.REACT_APP_BACKEND_URL || 5000;
 const AddBook = () => {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
@@ -10,7 +10,7 @@ const AddBook = () => {
     e.preventDefault();
     try {
       const newBook = { title, author, publishedYear };
-      await axios.post('http://localhost:5000/books/createBook', newBook);
+      await axios.post(`${backendUrl}/createBook`, newBook);
       window.location.reload(); // Simple reload for now
     } catch (err) {
       console.error(err);
